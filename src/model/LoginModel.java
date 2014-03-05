@@ -47,7 +47,8 @@ public class LoginModel {
 
             connection.setDoInput(true);
             connection.setDoOutput(true);
-// send request
+
+            // send request
             /*DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 
             wr.writeBytes("username=" + URLEncoder.encode(username,"UTF-8"));
