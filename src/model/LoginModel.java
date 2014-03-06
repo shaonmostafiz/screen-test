@@ -8,27 +8,31 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
-public class LoginModel {
+public class LoginModel extends BaseModel {
+
     public String username;
+
     public String password;
+
     String url = "http://localhost/screen-test";
 
     public boolean login() {
 
-        String username = this.username;
-        String password = getPassword(username);
+        Map<String,String> key_value_pair = new HashMap<String, String>();
 
-        if(password == null) {
-            //LoginController failed - user not exists
-            return  false;
-        }
+        key_value_pair.put("action","login");
+        key_value_pair.put("username",this.username);
+        key_value_pair.put("password",this.password);
 
-        if (this.password.equals(password)) {
-            return true;
-        }
+        String response = this.webservice(url,BaseModel.REQUEST_GET,key_value_pair);
+
+        
 
         return false;
+
     }
 
     private String getPassword(String username) {
@@ -38,7 +42,7 @@ public class LoginModel {
 
         try{
 
-            this.url += "?username="+username;
+            this.url += "&username="+username;
 
             url = new URL(this.url);
             connection = (HttpURLConnection) url.openConnection();

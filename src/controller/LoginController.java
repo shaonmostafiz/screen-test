@@ -16,12 +16,17 @@ public class LoginController extends JFrame {
     String UITitle = "Login Box";
     private static void loginProcess(String username,String password) {
         LoginModel loginModel = new LoginModel();
+
         loginModel.username = username;
+
         loginModel.password = password;
+
         boolean flag = loginModel.login();
+
         if(flag == true) {
             System.out.println("Login Successful");
         }
+
         else {
             System.out.println("Login Failed");
         }
