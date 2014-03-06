@@ -1,6 +1,7 @@
 package controller;
 
 import model.LoginModel;
+import view.Dashboard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,12 +10,16 @@ import java.awt.event.ActionListener;
 
 public class LoginController extends JFrame {
 
+    private final Dashboard dashboardView = new Dashboard();
+
     public LoginController(){
-        this.initUI();
+        this.initLogin();
     }
 
     String UITitle = "Login Box";
-    private static void loginProcess(String username,String password) {
+
+    private boolean loginProcess(String username,String password) {
+
         LoginModel loginModel = new LoginModel();
 
         loginModel.username = username;
@@ -25,15 +30,13 @@ public class LoginController extends JFrame {
 
         if(flag == true) {
             System.out.println("Login Successful");
-        }
-
-        else {
+        } else {
             System.out.println("Login Failed");
         }
-        //login failed
+        return flag;
     }
 
-    private void initUI () {
+    private void initLogin () {
 
         JPanel panel = new JPanel();
 
@@ -53,7 +56,10 @@ public class LoginController extends JFrame {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginProcess(userTextField.getText(), userPasswordField.getText());
+                boolean loggedIn = loginProcess(userTextField.getText(), userPasswordField.getText());
+                if(loggedIn == true) {
+                    dashboardView.homeView();
+                }
             }
         });
 

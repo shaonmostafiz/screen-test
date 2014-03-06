@@ -1,6 +1,9 @@
 package model;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -29,10 +32,21 @@ public class LoginModel extends BaseModel {
 
         String response = this.webservice(url,BaseModel.REQUEST_GET,key_value_pair);
 
-        
+        try {
+            JSONObject objJson = new JSONObject(response);
 
+            int code = objJson.getInt("code");
+
+            if(code == 200) {
+                UserModel userModel = new UserModel();
+                userModel.setUsername(this.username);
+                return true;
+            }
+
+        } catch (JSONException e) {
+            return false;
+        }
         return false;
-
     }
 
     private String getPassword(String username) {
