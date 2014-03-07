@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 
 public class LoginController extends JFrame {
 
-    private final Dashboard dashboardView = new Dashboard();
 
     public LoginController(){
         this.initLogin();
@@ -42,7 +41,7 @@ public class LoginController extends JFrame {
 
         final JTextField userTextField = new JTextField();
         userTextField.setName("userName");
-        userTextField.setText("User Name");
+        userTextField.setText("Faisal");
         userTextField.setBounds(10,10,280,30);
 
         final JPasswordField userPasswordField = new JPasswordField();
@@ -58,13 +57,22 @@ public class LoginController extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 boolean loggedIn = loginProcess(userTextField.getText(), userPasswordField.getText());
                 if(loggedIn == true) {
-                    dashboardView.homeView();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            setVisible(false);
+                            dispose();
+                            Dashboard dashboard = new Dashboard();
+                            dashboard.homeView();
+                        }
+                    });
                 }
             }
         });
 
         getContentPane().add(panel);
         panel.setLayout(null); //new GridLayout(4,2,10,10));
+
 
         panel.add(userTextField);
         panel.add(userPasswordField);

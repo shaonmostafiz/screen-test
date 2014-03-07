@@ -38,7 +38,7 @@ public class LoginModel extends BaseModel {
             int code = objJson.getInt("code");
 
             if(code == 200) {
-                UserModel userModel = new UserModel();
+                UserModel userModel = UserModel.getUserModel();
                 userModel.setUsername(this.username);
                 return true;
             }

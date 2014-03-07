@@ -31,6 +31,10 @@ public class BaseModel {
             }
             //build request url
             this.REQUEST_URL = REQUEST_URL + "?" + queryString ;
+        } else if(REQUEST_TYPE == this.REQUEST_POST) {
+
+            
+
         }
 
         try {
