@@ -2,10 +2,12 @@ package model;
 
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -32,9 +34,7 @@ public class BaseModel {
             //build request url
             this.REQUEST_URL = REQUEST_URL + "?" + queryString ;
         } else if(REQUEST_TYPE == this.REQUEST_POST) {
-
-            
-
+            this.REQUEST_URL = REQUEST_URL;
         }
 
         try {
@@ -45,6 +45,20 @@ public class BaseModel {
             this.connection.setRequestMethod(REQUEST_TYPE);
             this.connection.setDoInput(true);
             this.connection.setDoOutput(true);
+
+            if(REQUEST_TYPE == this.REQUEST_POST) {
+
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+
+                Iterator<String> keys = KEY_VALUE_PAIR.keySet().iterator();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    wr.writeBytes("&"+key+"="+KEY_VALUE_PAIR.get(key));
+                }
+
+                wr.flush();
+                wr.close();
+            }
 
             //catch response
             InputStream inputStream = this.connection.getInputStream();

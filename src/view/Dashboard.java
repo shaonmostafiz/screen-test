@@ -3,6 +3,7 @@ package view;
 
 import controller.LoginController;
 import controller.SnapShoot;
+import model.BaseModel;
 import model.UserModel;
 import sun.misc.BASE64Encoder;
 
@@ -15,6 +16,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Dashboard extends JFrame {
@@ -43,24 +46,43 @@ public class Dashboard extends JFrame {
 
             BufferedImage imageContent = snapShoot.takeSnapShoot();
 
-            //ImageIO.write(imageContent,"png",new File(i+".png"));
+            //ImageIO.write(imageContent,"png",new File("Image__"+i+".png"));
+
+            //get content from image
+            //BufferedImage imageContentAgain = ImageIO.read(new File(i+".png"));
 
             //immediately send it to server
             String imageString = null;
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
             try {
+
                 ImageIO.write(imageContent,"png",bos);
+
                 byte[] imageBytes = bos.toByteArray();
 
                 BASE64Encoder encoder = new BASE64Encoder();
+
                 imageString = encoder.encode(imageBytes);
+
                 bos.close();
+
             } catch (IOException e) {
+
                 e.printStackTrace();
+
             }
 
             //System.out.println(imageString);
+            Map<String,String> key_value_pair = new HashMap<String, String>();
+
+            key_value_pair.put("action","uploadSnap");
+            key_value_pair.put("imageString",imageString);
+
+            BaseModel baseModel = new BaseModel();
+            String response = baseModel.webservice("http://localhost/screen-test/upload.php",BaseModel.REQUEST_POST,key_value_pair);
+
+            System.out.println(response);
 
         } catch (Exception e) {
             //
