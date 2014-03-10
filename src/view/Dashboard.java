@@ -36,56 +36,14 @@ public class Dashboard extends JFrame {
         label.setBounds(20,20,200,35);
         label.setVisible(true);
 
-        //take a snap shoot
         SnapShoot snapShoot = new SnapShoot();
-
         try {
-            Random random = new Random();
-
-            int i = random.nextInt();
-
-            BufferedImage imageContent = snapShoot.takeSnapShoot();
-
-            //ImageIO.write(imageContent,"png",new File("Image__"+i+".png"));
-
-            //get content from image
-            //BufferedImage imageContentAgain = ImageIO.read(new File(i+".png"));
-
-            //immediately send it to server
-            String imageString = null;
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-            try {
-
-                ImageIO.write(imageContent,"png",bos);
-
-                byte[] imageBytes = bos.toByteArray();
-
-                BASE64Encoder encoder = new BASE64Encoder();
-
-                imageString = encoder.encode(imageBytes);
-
-                bos.close();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
-
-            //System.out.println(imageString);
-            Map<String,String> key_value_pair = new HashMap<String, String>();
-
-            key_value_pair.put("action","uploadSnap");
-            key_value_pair.put("imageString",imageString);
-
-            BaseModel baseModel = new BaseModel();
-            String response = baseModel.webservice("http://localhost/screen-test/upload.php",BaseModel.REQUEST_POST,key_value_pair);
-
-            System.out.println(response);
-
+            //take a snap shoot
+            BufferedImage image = snapShoot.takeSnapShoot();
+            //save to server
+            snapShoot.sendSnapShoot(image);
         } catch (Exception e) {
-            //
+            e.printStackTrace();
         }
 
         JButton logoutButton = new JButton("Log out");
@@ -108,10 +66,29 @@ public class Dashboard extends JFrame {
             }
         });
 
+        JButton takeSnapShootBtn = new JButton("Take Snap Shoot");
+        takeSnapShootBtn.setBackground(Color.CYAN);
+        takeSnapShootBtn.setBounds(20,80,180,35);
+        takeSnapShootBtn.setVisible(true);
+
+        takeSnapShootBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    SnapShoot snap = new SnapShoot();
+                    BufferedImage newSnapImage = snap.takeSnapShoot();
+                    snap.sendSnapShoot(newSnapImage);
+                } catch (Exception snapException) {
+                    snapException.printStackTrace();
+                }
+            }
+        });
+
         getContentPane().add(panel);
 
         panel.add(label);
         panel.add(logoutButton);
+        panel.add(takeSnapShootBtn);
 
         setTitle("Home Page");
         setSize(500, 300);
